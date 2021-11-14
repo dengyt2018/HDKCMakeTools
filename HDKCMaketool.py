@@ -88,7 +88,7 @@ class BuildCMake():
         self.HDKPATH = path
 
     def setVSVersion(self, vs):
-        self.vsVersion = vs
+        self.vsVersion = vs[:-4]
 
     def preBuild(self):
         self.buildPath = Path(self.HDKPATH+"/build")
