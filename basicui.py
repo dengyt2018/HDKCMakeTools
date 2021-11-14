@@ -64,4 +64,5 @@ class Ui_Widget(object):
         self.labelHoudiniPath.setText(_translate("Widget", "Houdini Path:     "))
         self.pushButtonHoudiniPathOpen.setText(_translate("Widget", "Open"))
         self.comboBoxVisualStudio.setItemText(0, _translate("Widget", "Visual Studio 15 2017 x64"))
+        self.comboBoxVisualStudio.addItem(_translate("Widget", "Visual Studio 17 2022 x64"))
         self.pushButtonProjectBuild.setText(_translate("Widget", "    Build    "))

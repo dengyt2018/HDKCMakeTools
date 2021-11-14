@@ -82,13 +82,17 @@ class BuildCMake():
         self.env["HFS"] = str(hroot.getHFS())
         self.HDKPATH = ""
         self.fix = fixHoudiniPlugin
+        self.vsVersion = ""
 
     def setHDKPATH(self, path):
         self.HDKPATH = path
 
+    def setVSVersion(self, vs):
+        self.vsVersion = vs
+
     def preBuild(self):
         self.buildPath = Path(self.HDKPATH+"/build")
-        self.program = ["cmake", "-G" "Visual Studio 15 2017", "-A", "x64", ".."]
+        self.program = ["cmake", "-G" "{}".format(self.vsVersion), "-A", "x64", ".."]
         if self.buildPath.exists():
             try:
                 shutil.rmtree(self.buildPath)
@@ -129,27 +133,31 @@ class HDKCMakeWindow(QWidget):
     def createSignals(self):
         self.buttonGroup.buttonClicked.connect(self.onbtnGroupClicked)
 
-    def buildCMakeProject(self, folder):
+    def buildCMakeProject(self, folder, vs):
         print(folder)
+        print(vs)
         self.buildCmake.setHDKPATH(folder)
+        self.buildCmake.setVSVersion(vs)
         self.buildCmake.build()
 
     def onbtnGroupClicked(self, e):
         if (e == self.basicui.pushButtonHDKPathOpen):
                 HDKfolder = QFileDialog.getExistingDirectory(self,
-                                                  self.tr("HDKCMakeWindow", "Select HDK Project Path"),
-                                                  "D:\\")
+                                                self.tr("HDKCMakeWindow", "Select HDK Project Path"),
+                                                "D:\\")
                 self.basicui.lineEditHDKPath.setText(HDKfolder)
 
         if (e == self.basicui.pushButtonHoudiniPathOpen):
                 HFSfolder = QFileDialog.getExistingDirectory(self,
-                                                  self.tr("HDKCMakeWindow", "Select Houdini Root Path"),
-                                                  str(hroot.getHFS()))
+                                                self.tr("HDKCMakeWindow", "Select Houdini Root Path"),
+                                                str(hroot.getHFS()))
                 self.basicui.lineEditHoudiniPath.setText(HFSfolder)
 
         if (e == self.basicui.pushButtonProjectBuild):
             if (self.basicui.lineEditHDKPath.text() and self.basicui.lineEditHoudiniPath.text()):
-                self.buildCMakeProject(self.basicui.lineEditHDKPath.text())
+                self.buildCMakeProject(self.basicui.lineEditHDKPath.text(),
+                self.basicui.comboBoxVisualStudio.currentText()
+                )
             else:
                 pass
 
